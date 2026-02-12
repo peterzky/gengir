@@ -22,11 +22,28 @@ Gengir is a tool to create type definitions for PyGObject. It uses modern python
 
 ## Building & Installing
 
+### With Cargo
+
 To build this project, you need to have installed the Rust toolchain, version 1.56.0 or newer.
 
 `git clone` this repository, and run `cargo build --release`.
 
 You can run the program once using `cargo run --release`, but if you use separate `venv`s for your projects, I'd recommend installing it user wide with `cargo install --path .`
+
+### With Nix
+
+If you have Nix with flakes enabled, you can build and run gengir without installing Rust manually:
+
+```bash
+# Build the package
+nix build
+
+# Run directly
+nix run . -- Adw-1
+
+# Enter a development shell
+nix develop
+```
 
 
 ## Usage
@@ -34,6 +51,16 @@ You can run the program once using `cargo run --release`, but if you use separat
 The `*.gir` with the type info files should be included with each GNOME library development package in `/usr/share/gir-1.0/`.
 
 If you wanted to install stubs for libadwaita, run `gengir Adw-1`. If you're using a venv you'll need to run gengir inside the venv. With poetry for example just run `poetry run gengir Module-x`.
+
+### Custom GIR Path
+
+You can specify a custom path to GIR files using the `NIX_GIR_PATH` environment variable:
+
+```bash
+NIX_GIR_PATH=/path/to/gir/files/ gengir Adw-1
+```
+
+This is useful in Nix environments or when GIR files are installed in a non-standard location.
 
 ```
 USAGE:
