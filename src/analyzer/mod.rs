@@ -28,6 +28,10 @@ use self::{
 };
 
 const GIR_PATH: &str = "/usr/share/gir-1.0/";
+
+fn get_gir_path() -> String {
+    std::env::var("NIX_GIR_PATH").unwrap_or_else(|_| GIR_PATH.to_string())
+}
 const INCLUDE_TAG: &str = "include";
 const REPOSITORY_TAG: &str = "repository";
 const NAMESPACE_TAG: &str = "namespace";
@@ -64,7 +68,7 @@ impl Analyzer {
         eprintln!("{}{} v{}", &"| ".repeat(self.depth), module, version);
         self.depth += 1;
         let fname = format!("{}-{}.gir", module, version);
-        let gir = File::open(GIR_PATH.to_string() + &fname).unwrap();
+        let gir = File::open(get_gir_path() + &fname).unwrap();
         // let file = BufReader::new(file);
 
         let ns = self.analyze(gir);
